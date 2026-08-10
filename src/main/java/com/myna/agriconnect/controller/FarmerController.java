@@ -31,11 +31,11 @@ import java.util.Map;
             this.farmerService = farmerService;
         }
         @GetMapping("/get")
-        public List<Farmer> getFarmers() {
+        public List<FarmerResponseDTO> getFarmers() {
             return farmerService.getAllFarmers();
         }
         @GetMapping("/{id}")
-        public Farmer getFarmerById(@PathVariable Long id) {
+        public FarmerResponseDTO getFarmerById(@PathVariable Long id) {
             return farmerService.getFarmerById(id);
         }
 
@@ -50,36 +50,23 @@ import java.util.Map;
                     .body(responseDTO);
         }
         @PutMapping("/update/{id}")
-        public Farmer updateFarmer(
+        public ResponseEntity<FarmerResponseDTO> updateFarmer(
                 @PathVariable Long id,
-                @RequestBody Farmer farmer) {
-            return farmerService.updateFarmer(id, farmer);
+                @RequestBody @Valid FarmerRequestDTO farmerRequestDTO) {
+
+            FarmerResponseDTO responseDTO =
+                    farmerService.updateFarmer(id, farmerRequestDTO);
+
+            return ResponseEntity.ok(responseDTO);
         }
         @DeleteMapping("/delete/{id}")
-        public ResponseEntity<String> deleteFarmer(@PathVariable Long id) {
+        public ResponseEntity<Void> deleteFarmer(@PathVariable Long id) {
 
             farmerService.deleteFarmer(id);
 
-            return ResponseEntity.ok("Farmer deleted successfully");
+            return ResponseEntity.noContent().build();
         }
-        @ExceptionHandler(FarmerNotFoundException.class)
-        public ResponseEntity<String> handleFarmerNotFound(FarmerNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-        @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<Map<String, String>> handleValidationException(
-                MethodArgumentNotValidException ex) {
 
-            Map<String, String> errors = new HashMap<>();
-
-            ex.getBindingResult().getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage())
-            );
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(errors);
-        }
         }
 
 

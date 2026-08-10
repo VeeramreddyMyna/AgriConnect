@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import com.myna.agriconnect.dto.FarmerRequestDTO;
 import com.myna.agriconnect.dto.FarmerResponseDTO;
-
+import java.util.ArrayList;
 @Service
 public class FarmerService {
 
@@ -38,22 +38,50 @@ public class FarmerService {
 
         return responseDTO;
     }
-    public List<Farmer> getAllFarmers() {
-        return farmerRepository.findAll();
+    public List<FarmerResponseDTO> getAllFarmers() {
+
+        List<Farmer> farmers = farmerRepository.findAll();
+
+        List<FarmerResponseDTO> responseList = new java.util.ArrayList<>();
+
+        for (Farmer farmer : farmers) {
+
+            FarmerResponseDTO responseDTO = new FarmerResponseDTO();
+
+            responseDTO.setId(farmer.getId());
+            responseDTO.setName(farmer.getName());
+            responseDTO.setAge(farmer.getAge());
+            responseDTO.setVillage(farmer.getVillage());
+            responseDTO.setCrop(farmer.getCrop());
+
+            responseList.add(responseDTO);
+        }
+
+        return responseList;
     }
-    public Farmer getFarmerById(Long id) {
+    public FarmerResponseDTO getFarmerById(Long id) {
 
         Optional<Farmer> farmer = farmerRepository.findById(id);
 
         if (farmer.isPresent()) {
-            return farmer.get();
+            Farmer existingFarmer = farmer.get();
+
+            FarmerResponseDTO responseDTO = new FarmerResponseDTO();
+
+            responseDTO.setId(existingFarmer.getId());
+            responseDTO.setName(existingFarmer.getName());
+            responseDTO.setAge(existingFarmer.getAge());
+            responseDTO.setVillage(existingFarmer.getVillage());
+            responseDTO.setCrop(existingFarmer.getCrop());
+
+            return responseDTO;
         }
 
         throw new FarmerNotFoundException(
                 "Farmer not found with id: " + id
         );
     }
-    public Farmer updateFarmer(Long id, Farmer updatedFarmer) {
+    public FarmerResponseDTO updateFarmer(Long id, FarmerRequestDTO farmerRequestDTO) {
 
         Optional<Farmer> farmer = farmerRepository.findById(id);
 
@@ -61,12 +89,22 @@ public class FarmerService {
 
             Farmer existingFarmer = farmer.get();
 
-            existingFarmer.setName(updatedFarmer.getName());
-            existingFarmer.setVillage(updatedFarmer.getVillage());
-            existingFarmer.setCrop(updatedFarmer.getCrop());
-            existingFarmer.setAge(updatedFarmer.getAge());
+            existingFarmer.setName(farmerRequestDTO.getName());
+            existingFarmer.setVillage(farmerRequestDTO.getVillage());
+            existingFarmer.setCrop(farmerRequestDTO.getCrop());
+            existingFarmer.setAge(farmerRequestDTO.getAge());
 
-            return farmerRepository.save(existingFarmer);
+            Farmer savedFarmer = farmerRepository.save(existingFarmer);
+
+            FarmerResponseDTO responseDTO = new FarmerResponseDTO();
+
+            responseDTO.setId(savedFarmer.getId());
+            responseDTO.setName(savedFarmer.getName());
+            responseDTO.setAge(savedFarmer.getAge());
+            responseDTO.setVillage(savedFarmer.getVillage());
+            responseDTO.setCrop(savedFarmer.getCrop());
+
+            return responseDTO;
         }
 
         throw new FarmerNotFoundException(
