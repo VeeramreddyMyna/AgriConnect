@@ -38,6 +38,25 @@ import java.util.Map;
         public FarmerResponseDTO getFarmerById(@PathVariable Long id) {
             return farmerService.getFarmerById(id);
         }
+        @GetMapping("/crop/{crop}")
+        public List<FarmerResponseDTO> getFarmersByCrop(
+                @PathVariable String crop) {
+
+            return farmerService.getFarmersByCrop(crop);
+        }
+        @GetMapping("/village/{village}")
+        public List<FarmerResponseDTO> getFarmersByVillage(
+                @PathVariable String village) {
+
+            return farmerService.getFarmersByVillage(village);
+        }
+        @GetMapping("/crop/{crop}/age/{age}")
+        public List<FarmerResponseDTO> getFarmersByCropAndMinimumAge(
+                @PathVariable String crop,
+                @PathVariable Integer age) {
+
+            return farmerService.getFarmersByCropAndMinimumAge(crop, age);
+        }
 
         @PostMapping("/add")
         public ResponseEntity<FarmerResponseDTO> addFarmer(
