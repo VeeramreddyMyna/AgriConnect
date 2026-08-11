@@ -21,6 +21,8 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
     @RestController
     @RequestMapping("/farmers")
@@ -56,6 +58,22 @@ import java.util.Map;
                 @PathVariable Integer age) {
 
             return farmerService.getFarmersByCropAndMinimumAge(crop, age);
+        }
+        @GetMapping("/sort/age")
+        public List<FarmerResponseDTO> getFarmersByAgeAscending() {
+
+            return farmerService.getFarmersByAgeAscending();
+        }
+        @GetMapping("/sort/age-desc")
+        public List<FarmerResponseDTO> getFarmersByAgeDescending() {
+
+            return farmerService.getFarmersByAgeDescending();
+        }
+        @GetMapping("/page")
+        public Page<FarmerResponseDTO> getFarmersWithPagination(
+                Pageable pageable) {
+
+            return farmerService.getFarmersWithPagination(pageable);
         }
 
         @PostMapping("/add")

@@ -8,4 +8,6 @@ public interface FarmerRepository extends JpaRepository<Farmer, Long> {
     List<Farmer> findByCrop(String crop);
     List<Farmer> findByVillage(String village);
     List<Farmer> findByCropAndAgeGreaterThanEqual(String crop, Integer age);
+    List<Farmer> findAllByOrderByAgeAsc();
+    List<Farmer> findAllByOrderByAgeDesc();
 }

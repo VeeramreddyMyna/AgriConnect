@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import com.myna.agriconnect.dto.FarmerRequestDTO;
 import com.myna.agriconnect.dto.FarmerResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class FarmerService {
@@ -80,6 +82,30 @@ public class FarmerService {
 
         return responseList;
     }
+    public List<FarmerResponseDTO> getFarmersByAgeAscending() {
+
+        List<Farmer> farmers = farmerRepository.findAllByOrderByAgeAsc();
+
+        List<FarmerResponseDTO> responseList = new ArrayList<>();
+
+        for (Farmer farmer : farmers) {
+            responseList.add(toResponseDTO(farmer));
+        }
+
+        return responseList;
+    }
+    public List<FarmerResponseDTO> getFarmersByAgeDescending() {
+
+        List<Farmer> farmers = farmerRepository.findAllByOrderByAgeDesc();
+
+        List<FarmerResponseDTO> responseList = new ArrayList<>();
+
+        for (Farmer farmer : farmers) {
+            responseList.add(toResponseDTO(farmer));
+        }
+
+        return responseList;
+    }
     public List<FarmerResponseDTO> getFarmersByCropAndMinimumAge(
             String crop, Integer age) {
 
@@ -93,6 +119,12 @@ public class FarmerService {
         }
 
         return responseList;
+    }
+    public Page<FarmerResponseDTO> getFarmersWithPagination(Pageable pageable) {
+
+        Page<Farmer> farmerPage = farmerRepository.findAll(pageable);
+
+        return farmerPage.map(this::toResponseDTO);
     }
     public FarmerResponseDTO updateFarmer(Long id, FarmerRequestDTO farmerRequestDTO) {
 
