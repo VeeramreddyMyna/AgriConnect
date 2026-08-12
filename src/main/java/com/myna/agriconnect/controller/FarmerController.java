@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 
     @RestController
     @RequestMapping("/farmers")
@@ -74,6 +75,31 @@ import org.springframework.data.domain.Pageable;
                 Pageable pageable) {
 
             return farmerService.getFarmersWithPagination(pageable);
+        }
+        @GetMapping("/search/crop")
+        public List<FarmerResponseDTO> searchFarmersByCrop(
+                @RequestParam String crop) {
+
+            return farmerService.searchFarmersByCrop(crop);
+        }
+        @GetMapping("/search/name")
+        public List<FarmerResponseDTO> searchFarmersByName(
+                @RequestParam String name) {
+
+            return farmerService.searchFarmersByName(name);
+        }
+        @GetMapping("/search/village")
+        public List<FarmerResponseDTO> searchFarmersByVillage(
+                @RequestParam String village) {
+
+            return farmerService.searchFarmersByVillage(village);
+        }
+        @GetMapping("/search")
+        public Page<FarmerResponseDTO> searchFarmers(
+                @RequestParam(required = false) String crop, Pageable pageable) {
+
+            return farmerService.searchFarmersByCropWithPagination(
+                    crop, pageable);
         }
 
         @PostMapping("/add")

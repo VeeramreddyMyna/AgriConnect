@@ -70,6 +70,59 @@ public class FarmerService {
 
         return responseList;
     }
+    public List<FarmerResponseDTO> searchFarmersByCrop(String crop) {
+
+        List<Farmer> farmers =
+                farmerRepository.findByCropContainingIgnoreCase(crop);
+
+        List<FarmerResponseDTO> responseList = new ArrayList<>();
+
+        for (Farmer farmer : farmers) {
+            responseList.add(toResponseDTO(farmer));
+        }
+
+        return responseList;
+    }
+    public Page<FarmerResponseDTO> searchFarmersByCropWithPagination(
+            String crop, Pageable pageable) {
+
+        Page<Farmer> farmerPage;
+
+        if (crop == null || crop.isBlank()) {
+            farmerPage = farmerRepository.findAll(pageable);
+        } else {
+            farmerPage =
+                    farmerRepository.findByCropContainingIgnoreCase(crop, pageable);
+        }
+
+        return farmerPage.map(this::toResponseDTO);
+    }
+    public List<FarmerResponseDTO> searchFarmersByName(String name) {
+
+        List<Farmer> farmers =
+                farmerRepository.findByNameContainingIgnoreCase(name);
+
+        List<FarmerResponseDTO> responseList = new ArrayList<>();
+
+        for (Farmer farmer : farmers) {
+            responseList.add(toResponseDTO(farmer));
+        }
+
+        return responseList;
+    }
+    public List<FarmerResponseDTO> searchFarmersByVillage(String village) {
+
+        List<Farmer> farmers =
+                farmerRepository.findByVillageContainingIgnoreCase(village);
+
+        List<FarmerResponseDTO> responseList = new ArrayList<>();
+
+        for (Farmer farmer : farmers) {
+            responseList.add(toResponseDTO(farmer));
+        }
+
+        return responseList;
+    }
     public List<FarmerResponseDTO> getFarmersByVillage(String village) {
 
         List<Farmer> farmers = farmerRepository.findByVillage(village);
