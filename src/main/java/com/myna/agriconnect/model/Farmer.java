@@ -3,6 +3,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 @Entity
 public class Farmer {
     public Long getId() {
@@ -24,9 +26,6 @@ public class Farmer {
         this.village = village;
     }
 
-    public void setCrop(String crop) {
-        this.crop = crop;
-    }
 
     public void setAge(int age) {
         this.age = age;
@@ -36,9 +35,6 @@ public class Farmer {
         return age;
     }
 
-    public String getCrop() {
-        return crop;
-    }
 
     public String getVillage() {
         return village;
@@ -50,6 +46,7 @@ public class Farmer {
 
     private String name;
     private String village;
-    private String crop;
     private int age;
+    @OneToMany(mappedBy = "farmer")
+    private List<Crop> crops;
 }

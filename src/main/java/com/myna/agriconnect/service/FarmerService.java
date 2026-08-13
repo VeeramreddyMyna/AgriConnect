@@ -27,7 +27,7 @@ public class FarmerService {
         farmer.setName(farmerRequestDTO.getName());
         farmer.setAge(farmerRequestDTO.getAge());
         farmer.setVillage(farmerRequestDTO.getVillage());
-        farmer.setCrop(farmerRequestDTO.getCrop());
+
 
         Farmer savedFarmer = farmerRepository.save(farmer);
 
@@ -59,7 +59,7 @@ public class FarmerService {
     }
     public List<FarmerResponseDTO> getFarmersByCrop(String crop) {
 
-        List<Farmer> farmers = farmerRepository.findByCrop(crop);
+        List<Farmer> farmers = farmerRepository.findByCrops_CropName(crop);
 
         List<FarmerResponseDTO> responseList = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class FarmerService {
     public List<FarmerResponseDTO> searchFarmersByCrop(String crop) {
 
         List<Farmer> farmers =
-                farmerRepository.findByCropContainingIgnoreCase(crop);
+                farmerRepository.findByCrops_CropNameContainingIgnoreCase(crop);
 
         List<FarmerResponseDTO> responseList = new ArrayList<>();
 
@@ -92,11 +92,13 @@ public class FarmerService {
             farmerPage = farmerRepository.findAll(pageable);
         } else {
             farmerPage =
-                    farmerRepository.findByCropContainingIgnoreCase(crop, pageable);
+                    farmerRepository.findByCrops_CropNameContainingIgnoreCase(crop, pageable);
         }
 
         return farmerPage.map(this::toResponseDTO);
+
     }
+
     public List<FarmerResponseDTO> searchFarmersByName(String name) {
 
         List<Farmer> farmers =
@@ -163,7 +165,7 @@ public class FarmerService {
             String crop, Integer age) {
 
         List<Farmer> farmers =
-                farmerRepository.findByCropAndAgeGreaterThanEqual(crop, age);
+                farmerRepository.findByCrops_CropNameAndAgeGreaterThanEqual(crop, age);
 
         List<FarmerResponseDTO> responseList = new ArrayList<>();
 
@@ -189,7 +191,6 @@ public class FarmerService {
 
             existingFarmer.setName(farmerRequestDTO.getName());
             existingFarmer.setVillage(farmerRequestDTO.getVillage());
-            existingFarmer.setCrop(farmerRequestDTO.getCrop());
             existingFarmer.setAge(farmerRequestDTO.getAge());
 
             Farmer savedFarmer = farmerRepository.save(existingFarmer);
@@ -222,7 +223,7 @@ public class FarmerService {
         responseDTO.setName(farmer.getName());
         responseDTO.setAge(farmer.getAge());
         responseDTO.setVillage(farmer.getVillage());
-        responseDTO.setCrop(farmer.getCrop());
+
 
         return responseDTO;
     }
